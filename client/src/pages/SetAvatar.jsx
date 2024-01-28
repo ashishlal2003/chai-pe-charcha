@@ -26,14 +26,38 @@ function SetAvatar() {
     theme: "dark",
   };
 
-  const setProfilePic = async () => {
-    if(selectedAvatar === undefined){
-      toast.error("Please select an avatar", toastOptions);
+  const temp=() => {
+    if(!localStorage.getItem('chat-app-user')){
+        navigate('/login');
     }
-    else{
-        const user = await JSON.parse(localStorage.getItem('chat-app-user'));
+    }
+
+    useEffect(() => {
+        temp();
+    }, [])
+
+  const setProfilePic = async () => {
+    if (selectedAvatar === undefined) {
+      toast.error("Please select an avatar", toastOptions);
+    } else {
+      const user = await JSON.parse(localStorage.getItem('chat-app-user'));
+      console.log(user);
+      const { data } = await axios.post(`${setAvatarRoute}/${user._id}`, {
+        image: avatars[selectedAvatar],
+      });
+  
+      console.log(data);
+      if (data.isSet) {
+        user.isAvatarSet = true;
+        user.avatarImage = data.image;
+        localStorage.setItem('chat-app-user', JSON.stringify(user));
+        navigate('/');
+      } else {
+        toast.error("Something went wrong", toastOptions);
+      }
     }
   };
+  
 
   const setup = async () => {
     const data = [];
@@ -49,7 +73,7 @@ function SetAvatar() {
 
   useEffect(() => {
     setup();
-  }, []);
+  }, [selectedAvatar]);
 
   return (
     <>

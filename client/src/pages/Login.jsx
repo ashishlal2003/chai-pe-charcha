@@ -29,16 +29,15 @@ function Login() {
         if(handleValidation()){
             const {username, password} = values;
             const {data} = await axios.post(loginRoute, {username, password});
+            console.log(data);
             if(data.status === false){
                 toast.error(data.msg, toastOptions);
             }
             else{
                 toast.success(data.msg, toastOptions);
-                localStorage.setItem('chat-app-user', JSON.stringify(data.user));
+                localStorage.setItem('chat-app-user', JSON.stringify(data.temp));
                 navigate("/");
             }
-
-            
         }
         
     }

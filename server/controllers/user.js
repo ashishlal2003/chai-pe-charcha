@@ -49,27 +49,44 @@ const login = async(req,res,next)=>{
     }   
 }
 
-const setAvatar = async(req,res,next) =>{
-    try{
-        const userId = req.params.id;
-        const avatarImage = req.body.image;
-        const userData = await User.findByIdAndUpdate(userId ,{ 
-            isAvatarSet : true,
-            avatarImage
-        })
+const setAvatar = async (req, res, next) => {
+    try {
+      const userId = req.params.id;
+      const avatarImage = req.body.image;
+      const userData = await User.findById(userId);
+  
+      if (!userData) {
+        return res.status(404).json({ msg: "User not found", isSet: false });
+      }
+  
+      const updatedUserData = await User.findByIdAndUpdate(
+        userId,
+        {
+          isAvatarSet: true,
+          avatarImage,
+        },
+        { new: true } // Return the updated document
+      );
+  
+      return res.json({
+        isSet: updatedUserData.isAvatarSet,
+        image: updatedUserData.avatarImage,
+      });
+    } catch (ex) {
+      next(ex);
+    }
+  };
+  
 
-        return res.json({
-            isSet : userData.isAvatarSet , 
-            image:userData.avatarImage
-        })
-
+const getAllUsers = async(req,res,next) => {
+    try{    
+        const users = await User.find({_id:{$ne:req.params.id}}).select([
+            "email", "username" , "avatarImage" , "_id"
+        ]);
+        return res.json(users);
     }catch(ex){
         next(ex);
     }
 }
 
-const getAllUsers = async(req,res,next){
-
-}
-
-module.exports = {register , login , setAvatar,getAllUsers}
+module.exports = {register , login , setAvatar, getAllUsers}
