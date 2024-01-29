@@ -1,34 +1,46 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import "../styles/chatInput.css";
-import Picker from "emoji-picker-react";
-import {IoMdSend} from 'react-icons/io';
-import {BsEmojiSmileFill} from 'react-icons/bs';
+import EmojiPicker from "emoji-picker-react";
+import { IoMdSend } from 'react-icons/io';
+import { BsEmojiSmileFill } from 'react-icons/bs';
 
-function ChatInput() {
+function ChatInput({handleSendMsg}) {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [msg, setMsg] = useState("");
 
-  const handleEmojiPickerHideShow = () =>{
+  const handleEmojiPickerHideShow = () => {
     setShowEmojiPicker(!showEmojiPicker);
   }
 
-  const handleEmojiClick = (event, emoji) => {
+  const handleEmojiClick = (event, emojiObject) => {
+    console.log("emoji nhi aa rha", emojiObject);
     let message = msg;
-    message += emoji.emoji;
+    message += emojiObject.emoji;
     setMsg(message);
   }
+
+
+  const sendChat = (e) =>{
+    e.preventDefault();
+    if(msg.length > 0){
+      handleSendMsg(msg);
+      setMsg('');
+    }
+  }
+
+
   return (
     <div className='chat-input'>
       <div className="button-container">
         <div className="emoji">
-          <BsEmojiSmileFill onClick={handleEmojiPickerHideShow}/>
+          <BsEmojiSmileFill onClick={handleEmojiPickerHideShow} />
           {
-            showEmojiPicker && <Picker onEmojiClick={handleEmojiClick}/>
+            showEmojiPicker && <EmojiPicker onEmojiClick={(emoji, event) => handleEmojiClick(event, emoji)} className='emoji-picker-react' height={400} width={300}/>
           }
         </div>
       </div>
-      <form className='input-container'>
-        <input type="text" placeholder='type your message...' value={msg} onChange={(e)=>setMsg(e.target.value)}/>
+      <form className='input-container' onSubmit={(e)=>sendChat(e)}>
+        <input type="text" placeholder='type your message...' value={msg} onChange={(e) => setMsg(e.target.value)} />
         <button className='submit'>
           <IoMdSend />
         </button>

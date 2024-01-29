@@ -1,15 +1,11 @@
-import React from 'react'
-import styled from 'styled-components'
+import React from 'react';
 
+import "../styles/message.css" 
 export default function Messages() {
   return (
-    <msg_container>
-      
-    </msg_container>
+    <div className='msg_container'>
+      hey
+    </div>
   )
 }
 
-const msg_container = styled.div`
-    height: 80%;
-
-`;
