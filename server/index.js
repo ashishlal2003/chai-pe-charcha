@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 require('dotenv').config();
 const userRoute = require("./routes/user");
+const MsgRoute = require("./routes/messages");
 
 
 const app = express();
@@ -14,6 +15,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use("/api/auth" , userRoute);
+app.use("/api/messages" , MsgRoute);
 
 mongoose.connect(process.env.MONGO_URI, { 
     useNewUrlParser: true, 

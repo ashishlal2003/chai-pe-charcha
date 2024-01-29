@@ -4,7 +4,7 @@
     align-items: center;
     flex-direction: column;
     gap: 3rem;
-    background-color: #131324;
+    background-color: rgba(191, 112, 33, 0.655);
     height: 100vh;
     width: 100vw;
   
@@ -41,7 +41,7 @@
       }
     }
     .sub_btn {
-      background-color: #4e0eff;
+      background-color: rgb(239, 161, 16);
       color: white;
       padding: 1rem 2rem;
       border: none;

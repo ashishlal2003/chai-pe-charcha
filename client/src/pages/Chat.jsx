@@ -3,46 +3,63 @@ import '../styles/chat.css';
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 import { allUsersRoute } from '../utils/APIRoutes';
+import Contact from '../components/Contact';
+import Welcome from '../components/Welcome';
+import ChatContainer from '../components/ChatContainer';
+
 
 function Chat() {
-  // const navigate = useNavigate();
-  // const [contacts , setContacts] = useState([]);
-  // const [currentUser , setCurrentUser] = useState(undefined);
+  const navigate = useNavigate();
+  const [contacts , setContacts] = useState([]);
+  const [currentUser , setCurrentUser] = useState(undefined);
+  const [currentChat , setCurrentChat] = useState(undefined);
+  const[isLoaded, setIsLoaded] = useState(false);
+  const temp1 = async() => {
+    if(!localStorage.getItem("chat-app-user")){
+      navigate("/login");
+    }else{
+      setCurrentUser(await JSON.parse(localStorage.getItem("chat-app-user")))
+      setIsLoaded(true);
+    }
+  }
 
-  // const temp1 = async() => {
-  //   if(!localStorage.getItem("chat-app-user")){
-  //     navigate("/login");
-  //   }else{
-  //     setCurrentUser(await JSON.parse(localStorage.getItem("chat-app-user")))
-  //   }
-  // }
+  useEffect( () =>{
+    temp1();
+  },[])
 
-  // useEffect( () =>{
-  //   temp1();
-  // },[])
+  const temp2 = async() => {
+    if(currentUser){
+      if(currentUser.isAvatarSet){
+        const data = await axios.get(`${allUsersRoute}/${currentUser._id}`);
+        setContacts(data.data);
+      }else{
+        navigate("/setAvatar");
+      }
+    }
+  }
 
-  // const temp2 = async() => {
-  //   if(currentUser){
-  //     if(currentUser.isAvatarSet){
-  //       const data = await axios.get(`${allUsersRoute}/${currentUser._id}`);
-  //       setContacts(data.data);
-      
-  //     }
-  //   }
-  // }
+  useEffect(()=>{
+    temp2();
+  },[currentUser])
 
-  // useEffect(()=>{
-  //   temp2();
-  // },[currentUser])
+  const handleChatChange = (chat) => {
+    setCurrentChat(chat);
+  }
 
-  // return (
-  //   <div className="mainContainer">
-  //     <div className="container">
-
-  //     </div>
-  //   </div>
-  // )
-  <div>hi</div>
+  return (
+    <div className="mainContainer">
+      <div className="container">
+          <Contact contacts={contacts} currentUser={currentUser} changeChat={handleChatChange}/>
+          {
+            isLoaded && currentChat === undefined ? (
+              <Welcome currentUser={currentUser}/>
+            ) : (
+              <ChatContainer currentChat={currentChat}/>
+            )
+          }
+      </div>
+    </div>
+  )
 }
 
 export default Chat;
