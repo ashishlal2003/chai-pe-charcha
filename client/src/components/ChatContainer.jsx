@@ -1,6 +1,7 @@
 import React from 'react'
 import "../styles/chatHeader.css";
 import ChatInput from './ChatInput';
+import Messages from './Messages';
 
 export default function ChatContainer({currentChat}) {
   const handleSendMsg = async (msg) =>{
@@ -21,7 +22,7 @@ export default function ChatContainer({currentChat}) {
                 </div>
             </div>
         </div>
-        <div className="chat-messages"></div>
+        <Messages/>
        <ChatInput handleSendMsg = {handleSendMsg}/>
     </div>)
     }
