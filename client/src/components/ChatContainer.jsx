@@ -9,28 +9,50 @@ export default function ChatContainer({ currentChat, currentUser }) {
 
   const [messages, setMessages] = useState([]);
 
-  useEffect(() => {
-    const setIds = async () => {
-      if (currentUser && currentChat) {
+  const setIds = async () => {
+    if (currentUser && currentChat) {
+      try {
         const response = await axios.get(getAllMsgsRoute, {
-          form: currentUser._id,
-          to: currentChat._id
+          params: {
+            from: currentUser._id,
+            to: currentChat._id
+          }
         });
         setMessages(response.data);
-        console.log(response);
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error fetching messages:", error);
       }
-    };
+    }
+  };
+  
 
+  useEffect(() => {
     setIds();
   }, [currentChat]);
 
   const handleSendMsg = async (msg) => {
-    await axios.post(sendMsgRoute, {
-      from: currentUser._id,
-      to: currentChat._id,
-      message: msg
-    })
+    try {
+      // Send the message to the server
+      await axios.post(sendMsgRoute, {
+        from: currentUser._id,
+        to: currentChat._id,
+        message: msg
+      });
+  
+      // Update the local state to include the new message
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        {
+          fromSelf: true, // Assuming the sender is the current user
+          message: msg,
+        },
+      ]);
+    } catch (error) {
+      console.error("Error sending message:", error);
+    }
   }
+  
 
   return (
     <>
