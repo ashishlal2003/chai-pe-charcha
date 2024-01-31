@@ -47,13 +47,11 @@ export default function ChatContainer({ currentChat, currentUser, socket }) {
           fromSelf: true, // Assuming the sender is the current user
           message: msg,
         },
-
-        socket.current.emit("send-msg", {
-          to: currentChat._id,
-          from: currentUser._id,
-          message: msg
-        })
       ]);
+  
+      // Scroll to the bottom of the chat container
+      const chatContainer = document.querySelector('.chat-messages');
+      chatContainer.scrollTop = chatContainer.scrollHeight;
     } catch (error) {
       console.error("Error sending message:", error);
     }
@@ -68,6 +66,7 @@ export default function ChatContainer({ currentChat, currentUser, socket }) {
     }
   },[])
 
+  
 
   return (
     <>

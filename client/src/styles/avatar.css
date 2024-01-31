@@ -1,3 +1,8 @@
+
+.loader {
+  height:300px;
+  width:300px;
+}
 .Container {
     display: flex;
     justify-content: center;
@@ -8,9 +13,7 @@
     height: 100vh;
     width: 100vw;
   
-    .loader {
-      max-inline-size: 100%;
-    }
+    
   
     .title-container {
       h1 {
