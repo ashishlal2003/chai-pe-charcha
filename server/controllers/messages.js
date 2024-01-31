@@ -3,7 +3,7 @@ const Messages = require("../models/message")
 const addMsg = async(req,res,next)=>{
     try{
         const {from , to , message} = req.body;
-        console.log(from , to , message);
+        // console.log(from , to , message);
 
         const data = await Messages.create({
             message : {text:message},
@@ -22,7 +22,7 @@ const addMsg = async(req,res,next)=>{
 const getAllMsgs = async (req, res, next) => {
     try {
       const { from, to } = req.query;
-      console.log(from, to);
+      // console.log(from, to);
       const messages = await Messages.find({
         users: {
           $all: [from, to],
