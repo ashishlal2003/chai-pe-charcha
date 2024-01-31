@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import "../styles/avatar.css";
 import styled from 'styled-components';
-import loader from '../assets/loader.gif';
+import loader from '../assets/test.png';
 import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import { setAvatarRoute } from '../utils/APIRoutes';

@@ -48,10 +48,15 @@ export default function ChatContainer({ currentChat, currentUser }) {
           message: msg,
         },
       ]);
+  
+      // Scroll to the bottom of the chat container
+      const chatContainer = document.querySelector('.chat-messages');
+      chatContainer.scrollTop = chatContainer.scrollHeight;
     } catch (error) {
       console.error("Error sending message:", error);
     }
   }
+  
   
 
   return (
@@ -76,7 +81,7 @@ export default function ChatContainer({ currentChat, currentUser }) {
                 return (
                   <div>
                     <div className={`message ${message.fromSelf ? "sended" : "recieved"}`}>
-                      <p>
+                      <p className='content'>
                         {message.message}
                       </p>
                     </div>

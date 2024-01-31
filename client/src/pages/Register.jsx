@@ -26,6 +26,7 @@ function Register() {
                 toast.error(data.msg, toastOptions);
             }
             else{
+                console.log("idhar"+data);
                 toast.success(data.msg, toastOptions);
                 localStorage.setItem('chat-app-user', JSON.stringify(data.user));
                 navigate("/");
