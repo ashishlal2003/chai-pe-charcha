@@ -55,9 +55,6 @@ export default function ChatContainer({ currentChat, currentUser, socket }) {
     } catch (error) {
       console.error("Error sending message:", error);
     }
-    const msgs = [...messages];
-    msg.push({ fromSelf: true, message: msg })
-    setMessages(msgs);
   }
 
   useEffect(() =>{
