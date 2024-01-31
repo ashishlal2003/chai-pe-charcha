@@ -6,6 +6,7 @@ require("dotenv").config();
 const socket = require("socket.io");
 const userRoute = require("./routes/user");
 const MsgRoute = require("./routes/messages");
+const path = require('path')
 
 const app = express();
 app.use(cors());
@@ -16,6 +17,18 @@ app.use(bodyParser.json());
 
 app.use("/api/auth", userRoute);
 app.use("/api/messages", MsgRoute);
+
+// Deployment
+const __dirname1 = path.resolve();
+if(process.env.NODE_ENV === 'production'){
+  app.use(express.static(path.join(__dirname1, '../client/build')))
+
+  app.get('*',(req,res)=>{
+    res.sendFile(path.resolve(__dirname1,'../client/build', 'index.html'));
+  })
+}
+
+//
 
 mongoose
   .connect(process.env.MONGO_URI, {
