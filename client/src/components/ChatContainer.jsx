@@ -5,7 +5,7 @@ import Messages from './Messages';
 import axios from "axios";
 import { getAllMsgsRoute, sendMsgRoute } from '../utils/APIRoutes';
 
-export default function ChatContainer({ currentChat, currentUser }) {
+export default function ChatContainer({ currentChat, currentUser, socket }) {
 
   const [messages, setMessages] = useState([]);
 
@@ -25,7 +25,7 @@ export default function ChatContainer({ currentChat, currentUser }) {
       }
     }
   };
-  
+
 
   useEffect(() => {
     setIds();
@@ -39,7 +39,7 @@ export default function ChatContainer({ currentChat, currentUser }) {
         to: currentChat._id,
         message: msg
       });
-  
+
       // Update the local state to include the new message
       setMessages((prevMessages) => [
         ...prevMessages,
@@ -47,12 +47,27 @@ export default function ChatContainer({ currentChat, currentUser }) {
           fromSelf: true, // Assuming the sender is the current user
           message: msg,
         },
+
+        socket.current.emit("send-msg", {
+          to: currentChat._id,
+          from: currentUser._id,
+          message: msg
+        })
       ]);
     } catch (error) {
       console.error("Error sending message:", error);
     }
+    const msgs = [...messages];
+    msg.push({ fromSelf: true, message: msg })
+    setMessages(msgs);
   }
-  
+
+  useEffect(() =>{
+    if(socket.current){
+      socket.current.on("msg-recieve");
+    }
+  },[])
+
 
   return (
     <>
@@ -76,7 +91,7 @@ export default function ChatContainer({ currentChat, currentUser }) {
                 return (
                   <div>
                     <div className={`message ${message.fromSelf ? "sended" : "recieved"}`}>
-                      <p>
+                      <p className='content'>
                         {message.message}
                       </p>
                     </div>
