@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "concurrently \"cd client && npm start\" \"cd server && npm start\"",
+    "start": "npm start --prefix server",
     "build": "npm install --prefix client && npm run build --prefix client && npm install --prefix server"
   },
   "devDependencies": {
